@@ -26,7 +26,7 @@ namespace WeatherCities.Services
         {
             return _cache.GetOrCreateAsync<OpenWeatherMap>(DB_KEY + city, async entry =>
               {
-                  entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1);
+                  entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
                   var response = default(OpenWeatherMap);
                   using (var client = _client.CreateClient())
                   {
