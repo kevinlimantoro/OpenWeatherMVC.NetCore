@@ -5,6 +5,14 @@
 <div id="containerInner" class="text-center">
     <h1 class="display-4">Welcome</h1>
     <div class="col-md-12 mb-2">
+        <label class="col-md-2">
+            <input type="radio" value="imperial" v-model="mode">Imperial (°F)
+        </label>
+        <label class="col-md-2">
+            <input type="radio" value="metric" v-model="mode">Metric (°C)
+        </label>
+    </div>
+    <div class="col-md-12 mb-2">
         <select v-model="selectedCountry" @@change="getCity">
             <option v-for="country in countries" :value="country">{{country}}</option>
         </select>
@@ -23,6 +31,10 @@
                     <th>Wind</th>
                     <th>Visibility</th>
                     <th>Sky Condition</th>
+                    <th>Temperature</th>
+                    <th>Dew Point</th>
+                    <th>Humidity</th>
+                    <th>Pressure</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,22 +46,10 @@
                     <td>
                         {{weather.clouds.all}}
                     </td>
-                </tr>
-            </tbody>
-            <thead>
-                <tr>
-                    <th>Temperature</th>
-                    <th>Dew Point</th>
-                    <th>Humidity</th>
-                    <th>Pressure</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{weather.main.temp}}</td>
-                    <td>{{(weather.main.temp - ((100 - weather.main.humidity)/5)).toFixed(2)}}</td>
-                    <td>{{weather.main.humidity}}</td>
-                    <td>{{weather.main.pressure}}</td>
+                    <td>{{tempBasedonMode}}</td>
+                    <td>{{dewBasedonMode}}</td>
+                    <td>{{weather.main.humidity.toFixed(2)}}</td>
+                    <td>{{weather.main.pressure.toFixed(2)}}</td>
                 </tr>
             </tbody>
         </table>
@@ -59,6 +59,16 @@
     var weather = new Vue({
         el: '#containerInner',
         computed: {
+            tempBasedonMode: function () {
+                return this.mode === 'imperial' ?
+                    `${this.weather.main.temp_f.toFixed(2)} °F` :
+                    `${this.weather.main.temp.toFixed(2)} °C`;
+            },
+            dewBasedonMode: function () {
+                return this.mode === 'imperial' ?
+                    `${this.weather.main.dew_point_f.toFixed(2)} °F` :
+                    `${this.weather.main.dew_point.toFixed(2)} °C`;
+            }
         },
         created() {
         },
@@ -72,6 +82,7 @@
         watch: {
         },
         data: {
+            mode: 'imperial',
             countries: [],
             selectedCountry: '',
             cities: [],

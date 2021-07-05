@@ -11,7 +11,7 @@ namespace UnitTest
     {
         private DependencyResolverHelper _serviceProvider;
         private ICountryDB _countryDB;
-        private IOpenWeatherMap _weather;
+        private HttpMockHandler _httpMock;
         [SetUp]
         public void Setup()
         {
@@ -20,7 +20,7 @@ namespace UnitTest
                 .Build();
             _serviceProvider = new DependencyResolverHelper(webHost);
             _countryDB = _serviceProvider.GetService<ICountryDB>();
-            _weather = _serviceProvider.GetService<IOpenWeatherMap>();
+            _httpMock = new HttpMockHandler(_serviceProvider);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace UnitTest
         [TestCase("Singapore")]
         public void GetWeather(string city)
         {
-            var res = _weather.Get(city);
+            var res = _httpMock.GetWeather(city);
             Assert.AreNotEqual(null, res);
         }
     }

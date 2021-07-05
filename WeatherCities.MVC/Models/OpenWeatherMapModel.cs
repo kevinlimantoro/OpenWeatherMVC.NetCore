@@ -26,12 +26,19 @@
 
     public class Main
     {
+        private float convertFahrenheit(float x) => (x * 9 / 5) + 32;
         public float temp { get; set; }
+        public float temp_f => convertFahrenheit(temp);
         public float feels_like { get; set; }
+        public float feels_like_f => convertFahrenheit(feels_like);
         public float temp_min { get; set; }
+        public float temp_min_f => convertFahrenheit(temp_min);
         public float temp_max { get; set; }
+        public float temp_max_f => convertFahrenheit(temp_max);
         public int pressure { get; set; }
         public int humidity { get; set; }
+        public float dew_point => (temp - (100 - humidity) / 5);
+        public float dew_point_f => convertFahrenheit(dew_point);
     }
 
     public class Wind
